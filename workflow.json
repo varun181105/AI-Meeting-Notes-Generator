@@ -1,0 +1,193 @@
+{
+  "name": "AI Meeting Notes Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "83523f08-a79a-4460-b73a-2e891765ff92",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "87c0bd71-d06a-4d44-8db5-ab1988590ac3",
+      "name": "Webhook",
+      "webhookId": "83523f08-a79a-4460-b73a-2e891765ff92"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e057900b-4fb6-4eda-8eae-1f6df3276132",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=Summarize the following meeting transcript.\n\nTranscript:\n{{$json.transcript}}\n\nCreate:\n\n1. Meeting summary\n2. Key decisions\n3. Action items"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "2ee555ee-4c12-4cd3-a873-f47765630ca5",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "vWJaKPqLF18WP6Lm",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1k9F94P1c7ViOkftETXnSbSCovZB7scND9KgqQgfIMqI",
+          "mode": "list",
+          "cachedResultName": "AI_Meeting_Notes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k9F94P1c7ViOkftETXnSbSCovZB7scND9KgqQgfIMqI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k9F94P1c7ViOkftETXnSbSCovZB7scND9KgqQgfIMqI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "DATE": "={{$now}}",
+            "MEETING SUMMARY": "={{$json.text}}",
+            "ACTION TIMES": "={{$json.text}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "DATE",
+              "displayName": "DATE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "MEETING SUMMARY",
+              "displayName": "MEETING SUMMARY",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ACTION TIMES",
+              "displayName": "ACTION TIMES",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        768,
+        0
+      ],
+      "id": "85c50414-e622-4625-a7dd-2a91782f21c7",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3QCPx9iKhDyNitsX",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "5dcd4824-4ed3-4419-986c-870cc897a51b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d2e231abdfc8c931bed175e8411b1093f89c27cdba2edf7c4ae803a6c14fb74f"
+  },
+  "id": "1Hp6513bB0q384SO",
+  "tags": []
+}
